@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'fdo_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fdodb',
+        'NAME': 'fdodb8',
         'USER': 'root',
         'PASSWORD': 'admin1995',
         'PORT': 3306,
@@ -87,6 +87,13 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase', # This is where you put the name of the db file.
+#                  # If one doesn't exist, it will be created at migration time.
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

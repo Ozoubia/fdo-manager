@@ -1,26 +1,95 @@
 from rest_framework import serializers
-from fdo_app.models import FDO, PID_metadata, profiles, PID_records
+# from fdo_app.models import FDO, PID_metadata, profiles, PID_records, artifact_prop
+
+from fdo_app.models import Thing, Organisation, CreativeWork, Service, WebAPI, SoftwareApplication, Person
 
 
-class fdoSerializer(serializers.ModelSerializer):
+class thingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FDO
+        model = Thing
         fields = '__all__'
 
 
-class profileSerializer(serializers.ModelSerializer):
+class organizationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = profiles
+        model = Organisation
         fields = '__all__'
 
 
-class recordsSerializer(serializers.ModelSerializer):
+class creativeWorkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PID_records
+        model = CreativeWork
+        fields = '__all__'
+        depth = 2
+
+
+class serviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = '__all__'
+        depth = 2
+
+    # # validation for the type input, for either a person or an organization
+    # def validate(self, data):
+    #     if data['provider_type'] == 'person' and not data.get('person'):
+    #         raise serializers.ValidationError("Person field is required when provider_type is 'person'.")
+    #     elif data['provider_type'] == 'organisation' and not data.get('organisation'):
+    #         raise serializers.ValidationError("Organization field is required when provider_type is 'organisation'.")
+    #     return data
+
+
+class webapiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebAPI
         fields = '__all__'
 
 
-class metadataSerializer(serializers.ModelSerializer):
+class softwareapplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PID_metadata
+        model = SoftwareApplication
         fields = '__all__'
+
+
+class personSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = '__all__'
+        depth = 2
+
+
+
+
+
+
+# class fdoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = FDO
+#         fields = '__all__'
+#         depth = 2
+#
+#
+# class profileSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = profiles
+#         fields = '__all__'
+#
+#
+# class recordsSerializer(serializers.ModelSerializer):
+#
+#
+#     class Meta:
+#         model = PID_records
+#         fields = '__all__'
+#         depth = 1
+#
+#
+# class metadataSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PID_metadata
+#         fields = '__all__'
+#
+#
+# class artPropertiesSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = artifact_prop
+#         fields = '__all__'
