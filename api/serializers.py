@@ -61,35 +61,3 @@ class personSerializer(serializers.ModelSerializer):
 
 
 
-# class fdoSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = FDO
-#         fields = '__all__'
-#         depth = 2
-#
-#
-# class profileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = profiles
-#         fields = '__all__'
-#
-#
-# class recordsSerializer(serializers.ModelSerializer):
-#
-#
-#     class Meta:
-#         model = PID_records
-#         fields = '__all__'
-#         depth = 1
-#
-#
-# class metadataSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = PID_metadata
-#         fields = '__all__'
-#
-#
-# class artPropertiesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = artifact_prop
-#         fields = '__all__'

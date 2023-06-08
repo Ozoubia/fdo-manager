@@ -33,6 +33,52 @@ def addPerson(request):
         message = 'Person addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def updatePerson(request, person_id):
+    try:
+        person = Person.objects.get(id=person_id)
+    except Person.DoesNotExist:
+        message = 'Person not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = personSerializer(person, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Person updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def patchPerson(request, person_id):
+    try:
+        person = Person.objects.get(id=person_id)
+    except Person.DoesNotExist:
+        message = 'Person not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = personSerializer(person, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'person partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deletePerson(request, person_id):
+    try:
+        person = Person.objects.get(id=person_id)
+    except Person.DoesNotExist:
+        message = 'Person not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    person.delete()
+    message = 'Person deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
+
 
 # organisation -------------------------------------------------------------
 @api_view(['GET'])
@@ -47,7 +93,6 @@ def getOrganization(request):
         message = 'Retrieved all Organizations successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def addOrganization(request):
     serializer = organizationSerializer(data=request.data)
@@ -58,6 +103,52 @@ def addOrganization(request):
     else:
         message = 'Organization addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def updateOrganisation(request, organisation_id):
+    try:
+        org = Organisation.objects.get(id=organisation_id)
+    except Organisation.DoesNotExist:
+        message = 'Organisation not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = organizationSerializer(org, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Organisation updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def patchOrganisation(request, organisation_id):
+    try:
+        org = Organisation.objects.get(id=organisation_id)
+    except Organisation.DoesNotExist:
+        message = 'Organisation not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = organizationSerializer(org, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Organisation partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteOrganisation(request, organisation_id):
+    try:
+        org = Organisation.objects.get(id=organisation_id)
+    except Organisation.DoesNotExist:
+        message = 'Organisation not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    org.delete()
+    message = 'Organisation deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
 
 
 # service ------------------------------------------------------------------
@@ -72,7 +163,6 @@ def getService(request):
     else:
         message = 'Retrieved all services successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
-
 
 @api_view(['POST'])
 def addService(request):
@@ -106,6 +196,54 @@ def addService(request):
         message = 'Organisation addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def updateService(request, service_id):
+    try:
+        ser = Service.objects.get(id=service_id)
+    except Service.DoesNotExist:
+        message = 'Service not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = serviceSerializer(ser, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Service updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PATCH'])
+def patchService(request, service_id):
+    try:
+        serv = Service.objects.get(id=service_id)
+    except Service.DoesNotExist:
+        message = 'Service not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = serviceSerializer(serv, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Service partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def deleteService(request, service_id):
+    try:
+        serv = Service.objects.get(id=service_id)
+    except Service.DoesNotExist:
+        message = 'Service not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serv.delete()
+    message = 'Service deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
+
 
 # creative work --------------------------------------------------------------
 @api_view(['GET'])
@@ -120,7 +258,6 @@ def getCreativeWork(request):
         message = 'Retrieved all creative works successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def addCreativeWork(request):
 
@@ -132,6 +269,53 @@ def addCreativeWork(request):
     else:
         message = 'Creative work addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def updateCreativeWork(request, creativework_id):
+    try:
+        cw = CreativeWork.objects.get(id=creativework_id)
+    except CreativeWork.DoesNotExist:
+        message = 'Creative work not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = creativeWorkSerializer(cw, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Creative work updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def patchCreativeWork(request, creativework_id):
+    try:
+        cw = CreativeWork.objects.get(id=creativework_id)
+    except CreativeWork.DoesNotExist:
+        message = 'Creative work not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = creativeWorkSerializer(cw, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Creative work partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteCreativeWork(request, creativework_id):
+    try:
+        cw = CreativeWork.objects.get(id=creativework_id)
+    except CreativeWork.DoesNotExist:
+        message = 'Creative work not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    cw.delete()
+    message = 'Creative work deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
+
 
 
 # Web api -------------------------------------------------------------------
@@ -147,7 +331,6 @@ def getWebAPI(request):
         message = 'Retrieved all Web APIs successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def addWebAPI(request):
 
@@ -159,6 +342,52 @@ def addWebAPI(request):
     else:
         message = 'Web API addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def updateWebAPI(request, webapi_id):
+    try:
+        webapi = WebAPI.objects.get(id=webapi_id)
+    except WebAPI.DoesNotExist:
+        message = 'Web API not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = webapiSerializer(webapi, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Web API updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def patchWebAPI(request, webapi_id):
+    try:
+        webapi = WebAPI.objects.get(id=webapi_id)
+    except WebAPI.DoesNotExist:
+        message = 'Web API not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = webapiSerializer(webapi, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Web API partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteWebAPI(request, webapi_id):
+    try:
+        webapi = WebAPI.objects.get(id=webapi_id)
+    except WebAPI.DoesNotExist:
+        message = 'Web API not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    webapi.delete()
+    message = 'Web API deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
 
 
 # software application -------------------------------------------------------
@@ -174,7 +403,6 @@ def getSoftwareApp(request):
         message = 'Retrieved all Software Applications successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def addSoftwareApp(request):
 
@@ -188,130 +416,51 @@ def addSoftwareApp(request):
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['PUT'])
+def updateSoftwareApp(request, softwareapp_id):
+    try:
+        soft = SoftwareApplication.objects.get(id=softwareapp_id)
+    except SoftwareApplication.DoesNotExist:
+        message = 'Software app not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
 
-# # FDO ---------------------------------------------------------------------
-# @api_view(['GET'])
-# def getFDO(request):
-#     FDOs = FDO.objects.all()
-#     serializer = fdoSerializer(FDOs, many=True)
-#
-#     return Response(serializer.data)
-#
-#
-# @api_view(['POST'])
-# def addFDO(request):
-#     serializer = fdoSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-#
-# # profiles ---------------------------------------------------------------
-# @api_view(['GET'])
-# def getProfiles(request):
-#     pfs = profiles.objects.all()
-#     serializer = profileSerializer(pfs, many=True)
-#
-#     return Response(serializer.data)
-#
-#
-# # get one profile with id
-# @api_view(['GET'])
-# def getProfile(request, id):
-#     try:
-#         pf = pf = profiles.objects.get(id=id)
-#
-#     except profiles.DoesNotExist:
-#         msg = {'msg': "not found error"}
-#         return Response(msg)
-#
-#     serializer = profileSerializer(pf)
-#     return Response(serializer.data)
-#
-#
-#     return Response(serializer.data)
-#
-#
-# @api_view(['POST'])
-# def addProfiles(request):
-#     serializer = profileSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-#
-#
-# @api_view(['PATCH'])
-# def updateProfiles(request, id):
-#     try:
-#         pf = profiles.objects.get(id=id)
-#     except profiles.DoesNotExist:
-#         msg = {'msg': "not found error"}
-#         return Response(msg)
-#
-#     serializer = profileSerializer(pf, data=request.data, partial=True)
-#
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data)
-#     return Response(serializer.errors)
-#
-#
-# @api_view(['DELETE'])
-# def deleteProfile(request, id):
-#     try:
-#         pf = profiles.objects.get(id=id)
-#     except profiles.DoesNotExist:
-#         msg = {'msg': "not found error"}
-#         return Response(msg)
-#     pf.delete()
-#
-#     return Response(status=status.HTTP_204_NO_CONTENT)
-#
-# # records ----------------------------------------------------------------------------
-# @api_view(['GET'])
-# def getRecords(request):
-#     recs = PID_records.objects.all()
-#     serializer = recordsSerializer(recs, many=True)
-#
-#     return Response(serializer.data)
-#
-#
-# @api_view(['POST'])
-# def addRecords(request):
-#     serializer = recordsSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-#
-#
-# # metadata -------------------------------------------------------------------------------
-# @api_view(['GET'])
-# def getMetaData(request):
-#     metad = PID_metadata.objects.all()
-#     serializer = metadataSerializer(metad, many=True)
-#
-#     return Response(serializer.data)
-#
-#
-# @api_view(['POST'])
-# def addMetaData(request):
-#     serializer = metadataSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-#
-#
-# # artifact properties -------------------------------------------------------------------------
-# @api_view(['GET'])
-# def getArtprop(request):
-#     artprop = artifact_prop.objects.all()
-#     serializer = artPropertiesSerializer(artprop, many=True)
-#
-#     return Response(serializer.data)
-#
-#
-# @api_view(['POST'])
-# def addArtprop(request):
-#     serializer = artPropertiesSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
+    serializer = softwareapplicationSerializer(soft, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Software app updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def patchSoftwareApp(request, softwareapp_id):
+    try:
+        soft = SoftwareApplication.objects.get(id=softwareapp_id)
+    except SoftwareApplication.DoesNotExist:
+        message = 'Software app not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = softwareapplicationSerializer(soft, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        message = 'Software app partially updated successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    else:
+        message = 'Invalid data'
+        return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def deleteSoftwareApp(request, softwareapp_id):
+    try:
+        soft = SoftwareApplication.objects.get(id=softwareapp_id)
+    except SoftwareApplication.DoesNotExist:
+        message = 'Software App not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+    soft.delete()
+    message = 'Software App deleted successfully'
+    return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
+
+
