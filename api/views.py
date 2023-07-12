@@ -1,6 +1,9 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 # from .serializers import fdoSerializer, profileSerializer, recordsSerializer, metadataSerializer, artPropertiesSerializer
 # from fdo_app.models import FDO, profiles, PID_records, PID_metadata, artifact_prop
 
@@ -20,6 +23,17 @@ def getPerson(request):
     else:
         message = 'Retrieved all persons successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def getPersonByID(request, person_id):
+    try:
+        person = Person.objects.get(id=person_id)
+        serializer = personSerializer(person)
+        message = 'Retrieved the person successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except Person.DoesNotExist:
+        message = 'Person not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
@@ -93,6 +107,18 @@ def getOrganization(request):
         message = 'Retrieved all Organizations successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def getOrgByID(request, organisation_id):
+    try:
+        org = Organisation.objects.get(id=organisation_id)
+        serializer = organizationSerializer(org)
+        message = 'Retrieved the Organisation successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except Organisation.DoesNotExist:
+        message = 'Organisation not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def addOrganization(request):
     serializer = organizationSerializer(data=request.data)
@@ -163,6 +189,18 @@ def getService(request):
     else:
         message = 'Retrieved all services successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def getServiceByID(request, service_id):
+    try:
+        serv = Service.objects.get(id=service_id)
+        serializer = serviceSerializer(serv)
+        message = 'Retrieved the Service successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except Service.DoesNotExist:
+        message = 'Service not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['POST'])
 def addService(request):
@@ -258,6 +296,18 @@ def getCreativeWork(request):
         message = 'Retrieved all creative works successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def getCreativeworkByID(request, creativework_id):
+    try:
+        cw = CreativeWork.objects.get(id=creativework_id)
+        serializer = creativeWorkSerializer(cw)
+        message = 'Retrieved the Creative work successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except CreativeWork.DoesNotExist:
+        message = 'Creative work not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def addCreativeWork(request):
 
@@ -331,6 +381,18 @@ def getWebAPI(request):
         message = 'Retrieved all Web APIs successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def getWebAPIByID(request, webapi_id):
+    try:
+        webapi = WebAPI.objects.get(id=webapi_id)
+        serializer = webapiSerializer(webapi)
+        message = 'Retrieved the web API successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except WebAPI.DoesNotExist:
+        message = 'Web API not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def addWebAPI(request):
 
@@ -403,6 +465,19 @@ def getSoftwareApp(request):
         message = 'Retrieved all Software Applications successfully'
         return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def getSoftwareAppByID(request, softwareapp_id):
+    try:
+        softapp = SoftwareApplication.objects.get(id=softwareapp_id)
+        serializer = softwareapplicationSerializer(softapp)
+        message = 'Retrieved the software application successfully'
+        return Response({'data': serializer.data, 'message': message}, status=status.HTTP_200_OK)
+    except SoftwareApplication.DoesNotExist:
+        message = 'Software Application not found'
+        return Response({'message': message}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 @api_view(['POST'])
 def addSoftwareApp(request):
 
@@ -414,7 +489,6 @@ def addSoftwareApp(request):
     else:
         message = 'Software application addition failed'
         return Response({'message': message, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['PUT'])
 def updateSoftwareApp(request, softwareapp_id):

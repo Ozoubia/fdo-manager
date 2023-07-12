@@ -1,13 +1,18 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from faker import Faker
 
+# # method only used to generate a random PID (for testing only)
+# def generate_pid():
+#     fake = Faker()
+#     return fake.unique.random_number(digits=16)
 
 class Thing(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=150)
     url = models.CharField(max_length=200)
-    identifier = models.CharField(max_length=200)
-    description = models.CharField(max_length=300)
+    identifier = models.TextField(max_length=200)
+    description = models.TextField(max_length=2000)
 
     class Meta:
         abstract = True
@@ -18,11 +23,15 @@ class Organisation(Thing):
     address = models.CharField(max_length=200)
     email = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
 
 class Person(Thing):
     affiliation = models.ForeignKey(Organisation, on_delete=models.CASCADE, null=True, blank=True)
     email = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
 
 class CreativeWork(Thing):
     # used for the type
@@ -40,8 +49,8 @@ class CreativeWork(Thing):
     )
 
     creator_type = models.CharField(max_length=20, choices=creator_type_choices)
-    creator_org = models.ForeignKey(Organisation, on_delete=models.CASCADE, null=True)
-    creator_person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    creator_org = models.ForeignKey(Organisation, on_delete=models.CASCADE, null=True, blank=True)
+    creator_person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True)
 
 
     # creator_id = models.PositiveIntegerField()
@@ -64,6 +73,8 @@ class CreativeWork(Thing):
     # publisher = models.ForeignKey(Organisation, on_delete=models.CASCADE)
     citation = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return self.name
 
 class Service(Thing):
     # provider_type_choices = (
@@ -91,10 +102,14 @@ class Service(Thing):
     provider_org = models.ForeignKey(Organisation, on_delete=models.CASCADE, null=True)
     provider_person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
 
+    def __str__(self):
+        return self.name
 
 class WebAPI(Service):
     documentation = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
 
 class SoftwareApplication(CreativeWork):
     releaseNotes = models.CharField(max_length=200)
@@ -104,6 +119,8 @@ class SoftwareApplication(CreativeWork):
     operatingSystem = models.CharField(max_length=50)
     processorRequirements = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
 
 
 

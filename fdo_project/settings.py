@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'fdo_app.apps.FdoAppConfig',
 
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,7 +85,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'admin1995',
         'PORT': 3306,
-        'HOST': '127.0.0.1',
+        'HOST': 'db',  # for using with docker
+        # 'Host': '127.0.0.1' # for using the api without docker
     }
 }
 

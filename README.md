@@ -4,6 +4,7 @@
 * Project description
 * Features
 * API endpoints
+* Running with Docker
 
 ### Project description
 The Fdo manager allows the management of Artifcats following the standards of Schema.org. 
@@ -57,3 +58,17 @@ List all the available API endpoints and their corresponding HTTP methods. Inclu
   * PATCH: `http://127.0.0.1:8000/softwareApp/{id}/patch/`
   * DELETE: `http://127.0.0.1:8000/softwareApp/{id}/delete/`
 
+
+### Running with Docker 
+to be able to run with docker, a latest version of docker must be installed, then 
+please follow the instruction to be able to run it.
+* Clone the repository in your local system
+* Navigate to the folder in which the docker file exists (FDO api)
+* run the following command to start the image (which would start two images; one for Django and one for mysql db)
+  * `docker-compose up --build`
+* [Optional] : if you need to use the Django admin panel, a superuser must be created such as 
+  * Open a command prompt and run `docker ps` to show the running containers; then copy the ID for the fdo app container
+  * then you can run this command to create a superuser; you'll get several prompt to choose the username and password.
+    * `docker exec -it {fdo container ID} python manage.py createsuperuser`
+* you can then access the fdo api dashboard with 
+  * `localhost:8000/admin`
