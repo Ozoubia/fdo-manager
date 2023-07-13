@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.32
+    environment:
+      MYSQL_DATABASE: 'fdodb8'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'admin1995'
+
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../fdo_project:/fdo_project
+    depends_on:
+      - db
+
