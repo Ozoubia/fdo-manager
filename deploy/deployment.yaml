@@ -1,0 +1,44 @@
+# deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: django
+          image: fdo_image:latest_fdo
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_HOST
+              value: db
+            - name: DB_NAME
+              value: fdodb8
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: admin1995
+      volumes:
+        - name: static-files
+          emptyDir: {}
+        - name: media-files
+          emptyDir: {}
+      initContainers:
+        - name: migration
+          image: fdo_image:latest_fdo
+          command: ["sh", "-c", "python manage.py makemigrations && python manage.py migrate"]
+          volumeMounts:
+            - name: static-files
+              mountPath: /fdo_project/static
+            - name: media-files
+              mountPath: /fdo_project/media

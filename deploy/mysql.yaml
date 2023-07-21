@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: django-app
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+      component: mysql
+  template:
+    metadata:
+      labels:
+        app: django-app
+        component: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.32
+          env:
+            - name: MYSQL_DATABASE
+              value: fdodb8
+            - name: MYSQL_ROOT_USER
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              value: admin1995
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc

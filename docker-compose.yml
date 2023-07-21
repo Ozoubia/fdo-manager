@@ -9,7 +9,13 @@ services:
       MYSQL_ROOT_PASSWORD: 'admin1995'
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - IMAGE_NAME=fdo_image
+        - TAG=latest_fdo
+
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
